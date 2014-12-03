@@ -66,6 +66,7 @@ if __name__ == '__main__':
     server = ':'.join([
         os.environ.get('ELASTICSEARCH_HOST'),
         os.environ.get('ELASTICSEARCH_PORT')])
-    print(server)
 
-    tw_c.publish_stats(hosts=[server], index='rancher_data')
+    index = os.environ.get('RANCHER_DATA_COLLECTOR_INDEX')
+
+    tw_c.publish_stats(hosts=[server], index=index)
