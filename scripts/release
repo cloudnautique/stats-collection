@@ -1,0 +1,30 @@
+#!/bin/bash
+set -x 
+
+cd $(dirname $0)/..
+
+REL_VER=$1
+if [ -z "${REL_VER}" ]; then
+    echo "Need a RELEASE Version of RLDataCollectors" 1>&2
+    exit 1
+fi
+
+if [ -e build ]; then
+  rm -rf build
+fi
+
+mkdir -p build
+cp tools/release/Dockerfile.tmpl ./build/
+cp scripts/bootstrap ./build
+cp -r crontabs build
+
+if [ -e dist ]; then
+    cp -r dist *egg-info ./build/
+    sed -e "s/VERSION/${REL_VER}/g" ./build/Dockerfile.tmpl > ./build/Dockerfile
+else
+    echo "Python package rldc-${REL_VER}*.tar.gz not found" 1>&2
+    exit 1
+fi
+
+cd build
+docker build --rm -t cloudnautique/rldc:$(git rev-parse --abbrev-ref HEAD) .

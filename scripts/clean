@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cd $(dirname $0)/..
+
+rm -rf *egg-info dist .tox build
+find . -name *.pyc -exec rm -f {} \;

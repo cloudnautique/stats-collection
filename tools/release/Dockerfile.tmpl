@@ -1,0 +1,15 @@
+FROM dockerbase/cron
+
+MAINTAINER Bill Maxwell <bill@rancher.com>
+
+ADD . /tmp/
+
+RUN /tmp/bootstrap
+RUN pip install /tmp/dist/rldc-VERSION*.tar.gz
+
+ADD crontabs/nobody /var/spool/cron/crontabs/
+RUN chown nobody /var/spool/cron/crontabs/nobody
+RUN chmod 600 /var/spool/cron/crontabs/*
+RUN sed -i 's/cron\ -f/cron\ -f\ -L\ 15/' /etc/service/cron/run
+
+CMD [ "runit" ]

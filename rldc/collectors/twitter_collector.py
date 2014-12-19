@@ -1,4 +1,5 @@
 import tweepy
+import os
 from elasticsearch import Elasticsearch
 from datetime import datetime
 
@@ -46,7 +47,7 @@ class TwitterCollector(object):
     def publish_stats(self, hosts=['127.0.0.1:9200'], index=None):
         stats = self.__get_stats()
         if stats is not None:
-            es = Elasticsearch(hosts=server)
+            es = Elasticsearch(hosts=hosts)
 
             meta = {
                 'timestamp': datetime.now(),
@@ -56,17 +57,21 @@ class TwitterCollector(object):
             es.create(doc_type=self.type, body=doc, index=index)
 
 
-if __name__ == '__main__':
-    import os
+def main():
     tw_c = TwitterCollector(
         os.environ.get('TWITTER_CONSUMER_KEY', None),
         os.environ.get('TWITTER_SECRET_KEY', None),
         'rancher_labs')
 
     server = ':'.join([
-        os.environ.get('ELASTICSEARCH_HOST'),
-        os.environ.get('ELASTICSEARCH_PORT')])
+        os.environ.get('ELASTICSEARCH_HOST', "elasticsearch"),
+        os.environ.get('ELASTICSEARCH_PORT', '9200')
+    ])
 
     index = os.environ.get('RANCHER_DATA_COLLECTOR_INDEX')
 
     tw_c.publish_stats(hosts=[server], index=index)
+
+
+if __name__ == '__main__':
+    main()

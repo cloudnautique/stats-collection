@@ -1,0 +1,15 @@
+#!/bin/bash
+
+cd $(dirname $0)/..
+
+trap cp_artifacts EXIT SIGTERM
+
+cp_artifacts()
+{
+    cp -r /scratch/dist *egg-info $(dirname $0)/..
+}
+
+cp -r . /scratch
+cd /scratch
+
+python setup.py sdist bdist_wheel
