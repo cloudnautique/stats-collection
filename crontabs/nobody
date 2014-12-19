@@ -1,1 +1,1 @@
-*/15 * * * * twitter_collector
+*/15 * * * * /usr/local/bin/twitter_collector

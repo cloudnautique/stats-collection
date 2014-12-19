@@ -14,7 +14,7 @@ setup(
     long_description=open('README.txt').read(),
     entry_points={
         'console_scripts': [
-            'twitter_collector=collectors.twitter_collector:main',
+            'twitter_collector=rldc.collectors.twitter_collector:main',
         ]
     }
 )
