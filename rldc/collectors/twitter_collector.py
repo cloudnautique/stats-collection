@@ -1,5 +1,6 @@
 import tweepy
 import os
+import sys
 from elasticsearch import Elasticsearch
 from datetime import datetime
 
@@ -9,7 +10,7 @@ FORMAT = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 logging.basicConfig(format=FORMAT)
 
 logger = logging.getLogger(__file__)
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 logger.addHandler(logging.StreamHandler())
 
 
@@ -27,15 +28,16 @@ class TwitterCollector(object):
         if consumer_key is not None and consumer_secret is not None:
             return tweepy.AppAuthHandler(consumer_key, consumer_secret)
         else:
-            logger.warn("Could not get Bearer token")
-            return None
+            logger.error("Could not get Bearer token")
+            logger.info("Can not get key or secret")
+            sys.exit(1)
 
     def __get_stats(self):
         try:
             user = self.api.get_user(self.user)
         except tweepy.error.TweepError:
             logger.error("User %s could not be retrieved", self.user)
-            return None
+            sys.exit(1)
 
         data = {
             'followers_count': user.followers_count,
