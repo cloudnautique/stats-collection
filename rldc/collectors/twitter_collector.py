@@ -1,8 +1,7 @@
 import tweepy
 import os
 import sys
-from elasticsearch import Elasticsearch
-from datetime import datetime
+from collector import ElasticsearchDataCollector
 
 import logging
 
@@ -14,7 +13,7 @@ logger.setLevel(logging.DEBUG)
 logger.addHandler(logging.StreamHandler())
 
 
-class TwitterCollector(object):
+class TwitterCollector(ElasticsearchDataCollector):
     '''
     Simple collector for getting a users followers/following counts.
     '''
@@ -32,7 +31,7 @@ class TwitterCollector(object):
             logger.info("Can not get key or secret")
             sys.exit(1)
 
-    def __get_stats(self):
+    def get_stats(self):
         try:
             user = self.api.get_user(self.user)
         except tweepy.error.TweepError:
@@ -45,18 +44,6 @@ class TwitterCollector(object):
         }
 
         return data
-
-    def publish_stats(self, hosts=['127.0.0.1:9200'], index=None):
-        stats = self.__get_stats()
-        if stats is not None:
-            es = Elasticsearch(hosts=hosts)
-
-            meta = {
-                'timestamp': datetime.now(),
-            }
-
-            doc = dict(stats.items() + meta.items())
-            es.create(doc_type=self.type, body=doc, index=index)
 
 
 def main():
