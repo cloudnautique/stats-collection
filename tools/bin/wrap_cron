@@ -1,0 +1,7 @@
+#!/bin/bash
+#
+# This is a very specific (crappy) shim for this runtime
+
+. /tmp/environment
+
+$@

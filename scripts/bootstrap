@@ -4,4 +4,4 @@ cd $(dirname $0)/..
 
 sudo apt-get update -qq
 sudo apt-get install -y python python-pip curl python-tox uuid-runtime
-pip install --upgrade pip tox setuptools wheel
+pip install --upgrade pip tox setuptools wheel virtualenv==1.11.6

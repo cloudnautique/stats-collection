@@ -1,0 +1,3 @@
+#!/bin/bash
+
+printenv | grep -i 'elastic\|twitter\|github\|rancher' | sed -e 's/^/export /' > /tmp/environment && /usr/sbin/cron -f -L 15

@@ -15,8 +15,10 @@ fi
 
 mkdir -p build
 cp tools/release/Dockerfile.tmpl ./build/
+cp tools/bin/wrap_cron ./build/
 cp scripts/bootstrap ./build
 cp -r crontabs build
+cp -r services build
 
 if [ -e dist ]; then
     cp -r dist *egg-info ./build/
