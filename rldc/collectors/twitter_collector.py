@@ -38,10 +38,11 @@ class TwitterCollector(ElasticsearchDataCollector):
             logger.error("User %s could not be retrieved", self.user)
             sys.exit(1)
 
-        data = {
+        data = []
+        data.append({
             'followers_count': user.followers_count,
             'following_count': user.friends_count,
-        }
+        })
 
         return data
 
@@ -59,7 +60,7 @@ def main():
 
     index = os.environ.get('RANCHER_DATA_COLLECTOR_INDEX')
 
-    tw_c.publish_stats(hosts=[server], index=index)
+    tw_c.publish_stats(tw_c.get_stats(), hosts=[server], index=index)
 
 
 if __name__ == '__main__':
