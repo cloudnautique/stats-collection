@@ -1,2 +1,2 @@
-0 * * * * /usr/local/bin/wrap_cron /usr/local/bin/twitter_collector
+0 * * * * /usr/local/bin/wrap_cron /usr/local/bin/twitter_collector rancher_labs ibuildthecloud
 0 * * * * /usr/local/bin/wrap_cron /usr/local/bin/github_collector

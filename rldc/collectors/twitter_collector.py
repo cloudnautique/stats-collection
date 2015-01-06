@@ -1,6 +1,7 @@
 import tweepy
 import os
 import sys
+import argparse
 from collector import ElasticsearchDataCollector
 
 import logging
@@ -40,6 +41,7 @@ class TwitterCollector(ElasticsearchDataCollector):
 
         data = []
         data.append({
+            'twitter_user': self.user,
             'followers_count': user.followers_count,
             'following_count': user.friends_count,
         })
@@ -47,11 +49,11 @@ class TwitterCollector(ElasticsearchDataCollector):
         return data
 
 
-def main():
+def setup_and_collect(twitter_user):
     tw_c = TwitterCollector(
         os.environ.get('TWITTER_CONSUMER_KEY', None),
         os.environ.get('TWITTER_SECRET_KEY', None),
-        'rancher_labs')
+        twitter_user)
 
     server = ':'.join([
         os.environ.get('ELASTICSEARCH_HOST', "elasticsearch"),
@@ -61,6 +63,17 @@ def main():
     index = os.environ.get('RANCHER_DATA_COLLECTOR_INDEX')
 
     tw_c.publish_stats(tw_c.get_stats(), hosts=[server], index=index)
+
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("twitter_users", type=str, nargs="+",
+                        help='a list of users')
+    args = parser.parse_args()
+    logger.info("Getting stats for users: {}".format(args.twitter_users))
+
+    for user in args.twitter_users:
+        setup_and_collect(user)
 
 
 if __name__ == '__main__':
