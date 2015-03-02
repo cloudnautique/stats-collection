@@ -9,7 +9,7 @@ reqs = [str(req.req) for req in install_reqs]
 
 setup(
     name='rldc',
-    version='0.4.1',
+    version='0.4.2',
     packages=find_packages(exclude=['tests*']),
     license='ASL 2.0',
     install_requires=reqs,
