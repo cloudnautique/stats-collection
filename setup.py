@@ -17,7 +17,8 @@ setup(
     entry_points={
         'console_scripts': [
             'twitter_collector=rldc.collectors.twitter_collector:main',
-            'github_collector=rldc.collectors.github_collector:main'
+            'github_collector=rldc.collectors.github_collector:main',
+            'github_release_collector=rldc.collectors.github_release_collector:main'
         ]
     }
 )
