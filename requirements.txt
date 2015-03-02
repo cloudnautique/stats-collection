@@ -1,3 +1,4 @@
 elasticsearch==1.2.0
 tweepy>=3.1.0
 pygithub>=1.25.2
+github3.py
